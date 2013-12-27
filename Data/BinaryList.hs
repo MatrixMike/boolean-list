@@ -1,4 +1,4 @@
-module BinaryList where
+module Data.BinaryList where
 
 integerToBinaryList :: Integral a => a -> [Bool]
 integerToBinaryList 0 = []
