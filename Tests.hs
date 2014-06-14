@@ -8,7 +8,11 @@ makeCase x y = TestCase (assertEqual "" x y)
 main = runTestTT $ TestList [
      makeCase (integerToBooleanList 12) [True,True,False,False]
     ,makeCase (booleanListToInteger [True,True,False,False]) 12
-    ,makeCase (byteStringToBooleanList $ booleanListToByteString [True,True,False,False]) ([True,True,False,False])
+    ,makeCase (splitIntegersAtBits 8 10 [7,224]) (31,[32])
+    -- 0000011111100000 --
+    --        >< 
+              -- |
+    ,makeCase (precedentalEncoding [1,3,1]) [True,True,True,False,True]
     ]
 
 -- f :: BS.ByteString
