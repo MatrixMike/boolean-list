@@ -53,5 +53,5 @@ library
   -- other-modules:       
   
   -- Other library packages from which modules are imported.
-  build-depends:       base ==4.6.*, HUnit ==1.2.*
+  build-depends:       base <10000, HUnit ==1.2.* , bytestring <10000
   
