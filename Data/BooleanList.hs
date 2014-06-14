@@ -3,6 +3,7 @@ module Data.BooleanList where
 import Data.List
 import Data.Word
 import qualified Data.ByteString
+import Control.Arrow
 
 integerToBooleanList :: Integral a => a -> [Bool]
 integerToBooleanList 0 = []
@@ -23,7 +24,8 @@ integerChunks n xs = unfoldr (\xs -> case xs of [] -> Nothing ; _ -> Just (takeI
 int8Chunks xs = integerChunks 8 xs
 word8Chunks xs =  map (fromIntegral :: Integral a => a -> Word8) . int8Chunks $ xs
 
-listOfIntegersToListToBooleanList = concatMap integerToBooleanList
+listOfIntegersToBooleanList = concatMap integerToBooleanList
+listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ integerChunks pSize xs
 
 overlayRight xs ys = reverse . map head . transpose . map reverse $ [ys,xs]
 
@@ -36,4 +38,8 @@ integersToPaddedBooleans p xs = concat (integersToPaddedBooleansLists p xs)
 toBoolean8s xs = integersToPaddedBooleans 8 xs
 
 booleanListToByteString = Data.ByteString.pack . word8Chunks
-byteStringToBooleanList = listOfIntegersToListToBooleanList . Data.ByteString.unpack
+byteStringToBooleanList = listOfIntegersToBooleanList . Data.ByteString.unpack
+
+precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded ( (+1) . floor  . logBase 2 $ (fromIntegral x)) y )  (scanl1 max xs) xs
+
+splitIntegersAtBits pSize n xs = splitAt n (listOfPaddedIntegersToBooleanList pSize xs)
