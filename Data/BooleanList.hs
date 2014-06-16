@@ -5,6 +5,7 @@ import Data.Word
 import qualified Data.ByteString
 import Control.Arrow
 import Control.Monad
+import Data.Maybe
 
 integerToBooleanList :: Integral a => a -> [Bool]
 integerToBooleanList 0 = []
@@ -32,7 +33,7 @@ integersToPaddedBooleans p xs = concat (integersToPaddedBooleansLists p xs)
 splitIntegersAtBits pSize n xs = booleanListToInteger *** (integerChunks pSize) $ (splitAt n (integersToPaddedBooleans pSize xs))
 
 takeIntegerFromBooleanList length xs = (booleanListToInteger h,rest)
- where (h,rest) = splitAt length xs
+  where (h,rest) = splitAt length xs
 
 listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ integerChunks pSize xs
 
@@ -44,4 +45,17 @@ precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded (
 
 int8Chunks xs = integerChunks 8 xs
 word8Chunks xs =  map (fromIntegral :: Integral a => a -> Word8) . int8Chunks $ xs
+
+allBooleanLists = concat $ map (\x -> replicateM x [False,True] ) [1..]
+
+{- slow versions for testing -}
+encodeBooleanListInInteger' x = allBooleanLists !! x
+encodeIntegerInBooleanList' xs = fromJust (elemIndex xs allBooleanLists)
+
+encodeBooleanListInInteger x = integerToBooleanListPadded (baseComponent x) (x - ((2^(baseComponent x)) -2))
+  where baseComponent x = floor (logBase 2 (fromIntegral (x+2)))
+
+encodeIntegerInBooleanList xs = (2 ^ (length xs) -2) + (booleanListToInteger xs)
+
+
 
