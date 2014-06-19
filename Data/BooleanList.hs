@@ -21,8 +21,11 @@ booleanListToInteger [] = 0
 integerChunks :: Integral a => Int -> [Bool] -> [a]
 integerChunks n xs = unfoldr (\xs -> case xs of [] -> Nothing ; _ -> Just (takeIntegerFromBooleanList n xs)) xs
 
+padBoolean :: Int -> [Bool] -> [Bool]
+padBoolean p xs = overlayRight (replicate p False) xs
+
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
-integerToBooleanListPadded p x = overlayRight (replicate p False) (integerToBooleanList  x)
+integerToBooleanListPadded p x = padBoolean p (integerToBooleanList x)
 
 integersToPaddedBooleansLists :: Integral a => Int -> [a] -> [[Bool]]
 integersToPaddedBooleansLists p xs = map (integerToBooleanListPadded p) xs
@@ -41,10 +44,12 @@ overlayRight xs ys = reverse . map head . transpose . map reverse $ [ys,xs]
 
 toBoolean8s xs = integersToPaddedBooleans 8 xs
 
-precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded ( (+1) . floor  . logBase 2 $ (fromIntegral x)) y )  (scanl1 max xs) xs
+precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded ( ceiling  . logBase 2 $ (fromIntegral x)) y )  (scanl1 max xs) xs
 
 int8Chunks xs = integerChunks 8 xs
 word8Chunks xs =  map (fromIntegral :: Integral a => a -> Word8) . int8Chunks $ xs
+
+toByteString xs = Data.ByteString.pack (word8Chunks xs)
 
 allBooleanLists = concat $ map (\x -> replicateM x [False,True] ) [1..]
 
