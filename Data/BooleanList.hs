@@ -56,13 +56,7 @@ integerToBooleanListPadded'' :: Bool -> Bool -> Int -> Integer -> [Bool]
 integerToBooleanListPadded'' s e p x = padBooleanList' s p (integerToBooleanList' e x)
 
 integerToBigEndianBooleanListPadded = integerToBooleanListPadded'' True True
-integerToLittleEndianBooleanListPadded = integerToBooleanListPadded'' True False
-
-integerToBigEndianBooleanListPaddedLeft = integerToBooleanListPadded'' True True
-integerToLittleEndianBooleanListPaddedLeft = integerToBooleanListPadded'' True False
-
-integerToBigEndianBooleanListPaddedRight = integerToBooleanListPadded'' False True
-integerToLittleEndianBooleanListPaddedRight = integerToBooleanListPadded'' False False
+integerToLittleEndianBooleanListPadded = integerToBooleanListPadded'' False False
 
 takeIntegerFromBooleanList = takeIntegerFromBooleanList' True
 takeIntegerFromBooleanList' b length xs = (booleanListToInteger' b h,rest)
@@ -73,8 +67,12 @@ takeIntegerFromBooleanListBigEndian = takeIntegerFromBooleanList' True
 
 booleanListToIntegers' e p xs = unfoldr unfolder xs
  where unfolder [] = Nothing
-       unfolder xs = Just (if length (take p xs) < p then first (*(2^(p-length xs))) $ takeIntegerFromBooleanList' e p xs 
-												     else takeIntegerFromBooleanList' e p xs)
+       unfolder xs = Just $ if length (take p xs) < p then first (op(2^(p-length xs))) $ takeIntegerFromBooleanList' e p xs 
+                                                     else takeIntegerFromBooleanList' e p xs
+       op = if e then (*) else flip const
+	  
+
+
 													 
 booleanListToIntegers = booleanListToIntegers' True
 bigEndianBooleanListToIntegers = booleanListToIntegers' True
@@ -91,7 +89,7 @@ integersToBooleanListPadded p xs = concat (integersToBooleanListsPadded p xs)
 integersToBooleanListPadded' e p xs = concat (integersToBooleanListsPadded'' e e p xs)
 
 integersToBigEndianBooleanListPadded = integersToBooleanListPadded' True
-integersTolittleEndianBooleanListPadded = integersToBooleanListPadded' False
+integersToLittleEndianBooleanListPadded = integersToBooleanListPadded' False
 
 listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ booleanListToIntegers pSize xs
 
