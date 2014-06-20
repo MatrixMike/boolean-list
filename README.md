@@ -1,9 +1,9 @@
 Boolean List
 =====
 
-Convert integers to their shortest binary digit sequences.
+Convert integers to boolean lists and visa versa.
 
-Installation:
+Installation (Coming soon...):
 
 ```
 cabal install boolean-list
