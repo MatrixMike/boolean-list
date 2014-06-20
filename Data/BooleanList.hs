@@ -49,6 +49,8 @@ padBooleanList' :: Bool -> Int -> [Bool] -> [Bool]
 padBooleanList' True = padBooleanListLeft
 padBooleanList' False = padBooleanListRight
 
+padBooleanList = padBooleanListLeft
+
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
 integerToBooleanListPadded p x = padBooleanListLeft p (integerToBooleanList x)
 
@@ -70,10 +72,7 @@ booleanListToIntegers' e p xs = unfoldr unfolder xs
        unfolder xs = Just $ if length (take p xs) < p then first (op(2^(p-length xs))) $ takeIntegerFromBooleanList' e p xs 
                                                      else takeIntegerFromBooleanList' e p xs
        op = if e then (*) else flip const
-	  
-
-
-													 
+	  												 
 booleanListToIntegers = booleanListToIntegers' True
 bigEndianBooleanListToIntegers = booleanListToIntegers' True
 littleEndianBooleanListToIntegers = booleanListToIntegers' False
