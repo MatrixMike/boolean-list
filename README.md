@@ -16,33 +16,48 @@ $ghci
 
 Prelude>:m + Data.BooleanList 
 
-Prelude Music.Instrument.Chord> integerToBooleanList 12
+Prelude Data.BooleanList> integerToBooleanList 12
 [True,True,False,False]
 
-Prelude Music.Instrument.Chord> booleanListToInteger [True,True,False,False]
+Prelude Data.BooleanList> booleanListToInteger [True,True,False,False]
 12
 
-Prelude Music.Instrument.Chord> integerToBooleanListLittleEndian 12
+Prelude Data.BooleanList> integerToBooleanListLittleEndian 12
 [False,False,True,True]
 
-Prelude Music.Instrument.Chord> littleEndianBooleanListToInteger [False,False,True,True]
+Prelude Data.BooleanList> littleEndianBooleanListToInteger [False,False,True,True]
 12
 
-Prelude Music.Instrument.Chord> padBooleanListLeft 5 [False,True,True]
+Prelude Data.BooleanList> padBooleanListLeft 5 [False,True,True]
 [False,False,False,True,True]
 
-Prelude Music.Instrument.Chord> padBooleanListRight 5 [False,True,True]
+Prelude Data.BooleanList> padBooleanListRight 5 [False,True,True]
 [False,True,True,False,False]
 
-Prelude Music.Instrument.Chord> takeIntegerFromBooleanList 2 [False,True,False,True,True]
+Prelude Data.BooleanList> integerToBooleanListPadded 4 2
+[False,False,True,False]
+
+Prelude Data.BooleanList> integerToLittleEndianBooleanListPadded 4 2
+[False,False,False,True]
+
+Prelude Data.BooleanList> integerToLittleEndianBooleanListPaddedRight 4 2
+[False,True,False,False]
+
+Prelude Data.BooleanList> takeIntegerFromBooleanList 2 [False,True,False,True,True]
 (1,[False,True,True])
 
-Prelude Music.Instrument.Chord> takeIntegerFromBooleanListLittleEndian 2 [False,True,False,True,True]
+Prelude Data.BooleanList> takeIntegerFromBooleanListLittleEndian 2 [False,True,False,True,True]
 (2,[False,True,True])
 
-Prelude Music.Instrument.Chord> booleanListToIntegers 2 [True,True,False,True,True]
-[3,1,2]
+Prelude Data.BooleanList> integersToBooleanListPadded 2 [2,1,2]
+[True,False,False,True,True,False]
 
-Prelude Music.Instrument.Chord> integersToBooleanListPadded 2 [3,1,2]
-[True,True,False,True,True,False]
+Prelude Data.BooleanList> integersTolittleEndianBooleanListPadded 2 [2,1,2]
+[True,False,False,True,True,False]
+
+Prelude Data.BooleanList> booleanListToIntegers 2 [True,False,False,True,True]
+[2,1,2]
+
+Prelude Data.BooleanList> littleEndianBooleanListToIntegers 2 [True,False,False,True,True]
+[1,2,2]
 ```

@@ -21,6 +21,9 @@ booleanListToInteger [] = 0
 integerToBooleanListBigEndian = integerToBooleanList
 bigEndianBooleanListToInteger = booleanListToInteger
 
+integerToBooleanList' True = integerToBooleanListBigEndian
+integerToBooleanList' False = integerToBooleanListLittleEndian
+
 integerToBooleanListLittleEndian = toLittleEndian . integerToBooleanList
 littleEndianBooleanListToInteger = booleanListToInteger . fromLittleEndian
 
@@ -42,8 +45,22 @@ padBooleanListLeft p xs = overlayRight (replicate p False) xs
 padBooleanListRight :: Int -> [Bool] -> [Bool]
 padBooleanListRight p xs = overlayLeft (replicate p False) xs
 
+padBooleanList' True = padBooleanListLeft
+padBooleanList' False = padBooleanListRight
+
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
 integerToBooleanListPadded p x = padBooleanListLeft p (integerToBooleanList x)
+
+integerToBooleanListPadded' s e p x = padBooleanList' s p (integerToBooleanList' e x)
+
+integerToBigEndianBooleanListPadded = integerToBooleanListPadded' True True
+integerToLittleEndianBooleanListPadded = integerToBooleanListPadded' True False
+
+integerToBigEndianBooleanListPaddedLeft = integerToBooleanListPadded' True True
+integerToLittleEndianBooleanListPaddedLeft = integerToBooleanListPadded' True False
+
+integerToBigEndianBooleanListPaddedRight = integerToBooleanListPadded' False True
+integerToLittleEndianBooleanListPaddedRight = integerToBooleanListPadded' False False
 
 takeIntegerFromBooleanList = takeIntegerFromBooleanList' True
 takeIntegerFromBooleanList' b length xs = (booleanListToInteger' b h,rest)
@@ -67,6 +84,12 @@ integersToBooleanListsPadded p xs = map (integerToBooleanListPadded p) xs
 integersToBooleanListPadded :: Integral a => Int -> [a] -> [Bool]
 integersToBooleanListPadded p xs = concat (integersToBooleanListsPadded p xs)
 
+integersToBooleanListPadded' :: Integral a => Bool -> Int -> [a] -> [Bool]
+integersToBooleanListPadded' e p xs = concat (integersToBooleanListsPadded p xs)
+
+integersToBigEndianBooleanListPadded = integersToBooleanListPadded' True
+integersTolittleEndianBooleanListPadded = integersToBooleanListPadded' False
+
 listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ booleanListToIntegers pSize xs
 
 toBoolean8s xs = integersToBooleanListPadded 8 xs
@@ -88,6 +111,3 @@ encodeBooleanListInInteger x = integerToBooleanListPadded (baseComponent x) (x -
   where baseComponent x = floor (logBase 2 (fromIntegral (x+2)))
 
 encodeIntegerInBooleanList xs = (2 ^ (length xs) -2) + (booleanListToInteger xs)
-
-
-
