@@ -18,7 +18,17 @@ booleanListToInteger (x:xs) = ((2 * fromIntegral (fromEnum x)) ^ (length xs)) + 
   where rest = booleanListToInteger xs
 booleanListToInteger [] = 0
 
+integerToBooleanListBigEndian = integerToBooleanList
+bigEndianBooleanListToInteger = booleanListToInteger
+
+integerToBooleanListLittleEndian = toLittleEndian . integerToBooleanList
+littleEndianBooleanListToInteger = booleanListToInteger . fromLittleEndian
+
+booleanListToInteger' True = bigEndianBooleanListToInteger
+booleanListToInteger' False = littleEndianBooleanListToInteger
+
 toLittleEndian = reverse
+fromLittleEndian = reverse
 
 overlayRight :: [a] -> [a] -> [a]
 overlayRight xs ys = reverse . map head . transpose . map reverse $ [ys,xs]
@@ -35,15 +45,21 @@ padBooleanListRight p xs = overlayLeft (replicate p False) xs
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
 integerToBooleanListPadded p x = padBooleanListLeft p (integerToBooleanList x)
 
-takeIntegerFromBooleanList length xs = (booleanListToInteger h,rest)
+takeIntegerFromBooleanList = takeIntegerFromBooleanList' True
+takeIntegerFromBooleanList' b length xs = (booleanListToInteger' b h,rest)
   where (h,rest) = splitAt length xs
+  
+takeIntegerFromBooleanListLittleEndian = takeIntegerFromBooleanList' False
+takeIntegerFromBooleanListBigEndian = takeIntegerFromBooleanList' True
 
---booleanListToIntegers :: Integral a => Int -> [Bool] -> [a]
-booleanListToIntegers p xs = unfoldr unfolder xs
+booleanListToIntegers' e p xs = unfoldr unfolder xs
  where unfolder [] = Nothing
-       unfolder xs = Just (if boolsLeft < p then first (*(2^boolsLeft)) $ takeIntegerFromBooleanList p xs 
-                                            else takeIntegerFromBooleanList p xs)
-       boolsLeft = length xs
+       unfolder xs = Just (if length (take p xs) < p then first (*(2^(p-length xs))) $ takeIntegerFromBooleanList' e p xs 
+												     else takeIntegerFromBooleanList' e p xs)
+													 
+booleanListToIntegers = booleanListToIntegers' True
+bigEndianBooleanListToIntegers = booleanListToIntegers' True
+littleEndianBooleanListToIntegers = booleanListToIntegers' False
 
 integersToBooleanListsPadded :: Integral a => Int -> [a] -> [[Bool]]
 integersToBooleanListsPadded p xs = map (integerToBooleanListPadded p) xs
