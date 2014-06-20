@@ -49,15 +49,15 @@ Prelude Data.BooleanList> takeIntegerFromBooleanList 2 [False,True,False,True,Tr
 Prelude Data.BooleanList> takeIntegerFromBooleanListLittleEndian 2 [False,True,False,True,True]
 (2,[False,True,True])
 
-Prelude Data.BooleanList> integersToBooleanListPadded 2 [2,1,2]
-[True,False,False,True,True,False]
-
-Prelude Data.BooleanList> integersTolittleEndianBooleanListPadded 2 [2,1,2]
-[True,False,False,True,True,False]
-
 Prelude Data.BooleanList> booleanListToIntegers 2 [True,False,False,True,True]
 [2,1,2]
 
 Prelude Data.BooleanList> littleEndianBooleanListToIntegers 2 [True,False,False,True,True]
 [1,2,2]
+
+Prelude Data.BooleanList> integersToBooleanListPadded 2 [2,1,2]
+[True,False,False,True,True,False]
+
+Prelude Data.BooleanList> integersTolittleEndianBooleanListPadded 2 [2,1,2]
+[False,True,True,False,False,True]
 ```

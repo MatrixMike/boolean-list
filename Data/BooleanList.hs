@@ -45,22 +45,24 @@ padBooleanListLeft p xs = overlayRight (replicate p False) xs
 padBooleanListRight :: Int -> [Bool] -> [Bool]
 padBooleanListRight p xs = overlayLeft (replicate p False) xs
 
+padBooleanList' :: Bool -> Int -> [Bool] -> [Bool]
 padBooleanList' True = padBooleanListLeft
 padBooleanList' False = padBooleanListRight
 
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
 integerToBooleanListPadded p x = padBooleanListLeft p (integerToBooleanList x)
 
-integerToBooleanListPadded' s e p x = padBooleanList' s p (integerToBooleanList' e x)
+integerToBooleanListPadded'' :: Bool -> Bool -> Int -> Integer -> [Bool]
+integerToBooleanListPadded'' s e p x = padBooleanList' s p (integerToBooleanList' e x)
 
-integerToBigEndianBooleanListPadded = integerToBooleanListPadded' True True
-integerToLittleEndianBooleanListPadded = integerToBooleanListPadded' True False
+integerToBigEndianBooleanListPadded = integerToBooleanListPadded'' True True
+integerToLittleEndianBooleanListPadded = integerToBooleanListPadded'' True False
 
-integerToBigEndianBooleanListPaddedLeft = integerToBooleanListPadded' True True
-integerToLittleEndianBooleanListPaddedLeft = integerToBooleanListPadded' True False
+integerToBigEndianBooleanListPaddedLeft = integerToBooleanListPadded'' True True
+integerToLittleEndianBooleanListPaddedLeft = integerToBooleanListPadded'' True False
 
-integerToBigEndianBooleanListPaddedRight = integerToBooleanListPadded' False True
-integerToLittleEndianBooleanListPaddedRight = integerToBooleanListPadded' False False
+integerToBigEndianBooleanListPaddedRight = integerToBooleanListPadded'' False True
+integerToLittleEndianBooleanListPaddedRight = integerToBooleanListPadded'' False False
 
 takeIntegerFromBooleanList = takeIntegerFromBooleanList' True
 takeIntegerFromBooleanList' b length xs = (booleanListToInteger' b h,rest)
@@ -81,11 +83,12 @@ littleEndianBooleanListToIntegers = booleanListToIntegers' False
 integersToBooleanListsPadded :: Integral a => Int -> [a] -> [[Bool]]
 integersToBooleanListsPadded p xs = map (integerToBooleanListPadded p) xs
 
+integersToBooleanListsPadded'' s e p xs = map (integerToBooleanListPadded'' s e p) xs
+
 integersToBooleanListPadded :: Integral a => Int -> [a] -> [Bool]
 integersToBooleanListPadded p xs = concat (integersToBooleanListsPadded p xs)
 
-integersToBooleanListPadded' :: Integral a => Bool -> Int -> [a] -> [Bool]
-integersToBooleanListPadded' e p xs = concat (integersToBooleanListsPadded p xs)
+integersToBooleanListPadded' e p xs = concat (integersToBooleanListsPadded'' e e p xs)
 
 integersToBigEndianBooleanListPadded = integersToBooleanListPadded' True
 integersTolittleEndianBooleanListPadded = integersToBooleanListPadded' False

@@ -25,8 +25,8 @@ expressions = [
   ,"integerToLittleEndianBooleanListPaddedRight 4 2"
   ,"takeIntegerFromBooleanList 2 [False,True,False,True,True]"
   ,"takeIntegerFromBooleanListLittleEndian 2 [False,True,False,True,True]"
-  ,"integersToBooleanListPadded 2 [2,1,2]"
-  ,"integersTolittleEndianBooleanListPadded 2 [2,1,2]"
   ,"booleanListToIntegers 2 [True,False,False,True,True]"
   ,"littleEndianBooleanListToIntegers 2 [True,False,False,True,True]"
+  ,"integersToBooleanListPadded 2 [2,1,2]"
+  ,"integersTolittleEndianBooleanListPadded 2 [2,1,2]"
  ]
