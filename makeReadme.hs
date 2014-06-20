@@ -12,7 +12,7 @@ insertAt = (\n x xs -> case splitAt n xs of { (a, b) -> a ++ [x] ++ b })
 main = do file <- readFile "README.md.template"
           let fileLines = lines file
           let modifiedFile = unlines $ insertAt (length fileLines -1) (
-								           (makeGhciLine (expressions!!0)) ++ "\n" ++ (show $(return (getExpression (expressions!!0))))  
+								     "\n" ++ (makeGhciLine (expressions!!0)) ++ "\n" ++ (show $(return (getExpression (expressions!!0))))  
 								++ "\n\n" ++ (makeGhciLine (expressions!!1)) ++ "\n" ++ (show $(return (getExpression (expressions!!1))))
 								++ "\n\n" ++ (makeGhciLine (expressions!!2)) ++ "\n" ++ (show $(return (getExpression (expressions!!2))))
 								++ "\n\n" ++ (makeGhciLine (expressions!!3)) ++ "\n" ++ (show $(return (getExpression (expressions!!3))))

@@ -15,6 +15,7 @@ Example:
 $ghci
 
 Prelude>:m + Data.BooleanList 
+
 Prelude Music.Instrument.Chord> integerToBooleanList 12
 [True,True,False,False]
 
