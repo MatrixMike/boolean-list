@@ -1,0 +1,18 @@
+Boolean List
+=====
+
+Convert integers to their shortest binary digit sequences.
+
+Installation:
+
+```
+cabal install boolean-list
+```
+
+Example:
+
+```
+$ghci
+
+Prelude>:m + Data.BooleanList 
+```

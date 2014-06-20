@@ -18,35 +18,46 @@ booleanListToInteger (x:xs) = ((2 * fromIntegral (fromEnum x)) ^ (length xs)) + 
   where rest = booleanListToInteger xs
 booleanListToInteger [] = 0
 
-integerChunks :: Integral a => Int -> [Bool] -> [a]
-integerChunks n xs = unfoldr (\xs -> case xs of [] -> Nothing ; _ -> Just (takeIntegerFromBooleanList n xs)) xs
+toLittleEndian = reverse
 
-padBoolean :: Int -> [Bool] -> [Bool]
-padBoolean p xs = overlayRight (replicate p False) xs
+overlayRight :: [a] -> [a] -> [a]
+overlayRight xs ys = reverse . map head . transpose . map reverse $ [ys,xs]
+
+overlayLeft :: [b] -> [b] -> [b]
+overlayLeft xs ys = map head . transpose $ [ys,xs]
+
+padBooleanListLeft :: Int -> [Bool] -> [Bool]
+padBooleanListLeft p xs = overlayRight (replicate p False) xs
+
+padBooleanListRight :: Int -> [Bool] -> [Bool]
+padBooleanListRight p xs = overlayLeft (replicate p False) xs
 
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
-integerToBooleanListPadded p x = padBoolean p (integerToBooleanList x)
-
-integersToPaddedBooleansLists :: Integral a => Int -> [a] -> [[Bool]]
-integersToPaddedBooleansLists p xs = map (integerToBooleanListPadded p) xs
-
-integersToPaddedBooleans :: Integral a => Int -> [a] -> [Bool]
-integersToPaddedBooleans p xs = concat (integersToPaddedBooleansLists p xs)
-
-splitIntegersAtBits pSize n xs = booleanListToInteger *** (integerChunks pSize) $ (splitAt n (integersToPaddedBooleans pSize xs))
+integerToBooleanListPadded p x = padBooleanListLeft p (integerToBooleanList x)
 
 takeIntegerFromBooleanList length xs = (booleanListToInteger h,rest)
   where (h,rest) = splitAt length xs
 
-listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ integerChunks pSize xs
+--booleanListToIntegers :: Integral a => Int -> [Bool] -> [a]
+booleanListToIntegers p xs = unfoldr unfolder xs
+ where unfolder [] = Nothing
+       unfolder xs = Just (if boolsLeft < p then first (*(2^boolsLeft)) $ takeIntegerFromBooleanList p xs 
+                                            else takeIntegerFromBooleanList p xs)
+       boolsLeft = length xs
 
-overlayRight xs ys = reverse . map head . transpose . map reverse $ [ys,xs]
+integersToBooleanListsPadded :: Integral a => Int -> [a] -> [[Bool]]
+integersToBooleanListsPadded p xs = map (integerToBooleanListPadded p) xs
 
-toBoolean8s xs = integersToPaddedBooleans 8 xs
+integersToBooleanListPadded :: Integral a => Int -> [a] -> [Bool]
+integersToBooleanListPadded p xs = concat (integersToBooleanListsPadded p xs)
+
+listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ booleanListToIntegers pSize xs
+
+toBoolean8s xs = integersToBooleanListPadded 8 xs
 
 precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded ( ceiling  . logBase 2 $ (fromIntegral x)) y )  (scanl1 max xs) xs
 
-int8Chunks xs = integerChunks 8 xs
+int8Chunks xs = booleanListToIntegers 8 xs
 word8Chunks xs =  map (fromIntegral :: Integral a => a -> Word8) . int8Chunks $ xs
 
 toByteString xs = Data.ByteString.pack (word8Chunks xs)
