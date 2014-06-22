@@ -54,11 +54,11 @@ padBooleanList = padBooleanListLeft
 integerToBooleanListPadded :: Integral a => Int -> a -> [Bool]
 integerToBooleanListPadded p x = padBooleanListLeft p (integerToBooleanList x)
 
-integerToBooleanListPadded'' :: Bool -> Bool -> Int -> Integer -> [Bool]
-integerToBooleanListPadded'' s e p x = padBooleanList' s p (integerToBooleanList' e x)
+integerToBooleanListPadded'' ::  Bool -> Int -> Integer -> [Bool]
+integerToBooleanListPadded'' e p x = padBooleanList' e p (integerToBooleanList' e x)
 
-integerToBigEndianBooleanListPadded = integerToBooleanListPadded'' True True
-integerToLittleEndianBooleanListPadded = integerToBooleanListPadded'' False False
+integerToBigEndianBooleanListPadded = integerToBooleanListPadded'' True
+integerToLittleEndianBooleanListPadded = integerToBooleanListPadded'' False
 
 takeIntegerFromBooleanList = takeIntegerFromBooleanList' True
 takeIntegerFromBooleanList' b length xs = (booleanListToInteger' b h,rest)
@@ -67,34 +67,51 @@ takeIntegerFromBooleanList' b length xs = (booleanListToInteger' b h,rest)
 takeIntegerFromBooleanListLittleEndian = takeIntegerFromBooleanList' False
 takeIntegerFromBooleanListBigEndian = takeIntegerFromBooleanList' True
 
-booleanListToIntegers' e p xs = unfoldr unfolder xs
- where unfolder [] = Nothing
-       unfolder xs = Just $ if length (take p xs) < p then first (op(2^(p-length xs))) $ takeIntegerFromBooleanList' e p xs 
-                                                     else takeIntegerFromBooleanList' e p xs
-       op = if e then (*) else flip const
-	  												 
 booleanListToIntegers = booleanListToIntegers' True
 bigEndianBooleanListToIntegers = booleanListToIntegers' True
 littleEndianBooleanListToIntegers = booleanListToIntegers' False
 
-integersToBooleanListsPadded :: Integral a => Int -> [a] -> [[Bool]]
-integersToBooleanListsPadded p xs = map (integerToBooleanListPadded p) xs
+booleanListToIntegers' = booleanListToIntegers'' False
 
-integersToBooleanListsPadded'' s e p xs = map (integerToBooleanListPadded'' s e p) xs
+booleanListLittleEndianToIntegersTerminated = booleanListToIntegers'' True False
+booleanListToIntegersTerminated = booleanListToIntegers'' True True
 
-integersToBooleanListPadded :: Integral a => Int -> [a] -> [Bool]
-integersToBooleanListPadded p xs = concat (integersToBooleanListsPadded p xs)
+booleanListToIntegers'' t e p [] = []  
+booleanListToIntegers'' t e p xs | bitsLeftOver && t = booleanListToIntegers'' False e p (xs ++ terminator) 
+                                 | bitsLeftOver && (not t) = (op(2^bitsToGo) int) : []
+                                 | otherwise = int : booleanListToIntegers'' t e p rest  
+ where (int,rest) = takeIntegerFromBooleanList' e p xs
+       bitsLeftOver = listLengthIsSmallerThanOrEqualTo (p-1) xs
+       bitsToGo = p - (length xs `rem` p)
+       terminator = ((take (bitsToGo + p) (False:repeat True)))
+       op = if e then (*) else flip const
 
-integersToBooleanListPadded' e p xs = concat (integersToBooleanListsPadded'' e e p xs)
+isTerminator p xs | listLengthIsSmallerThanOrEqualTo (2*p) xs = isTerminator' xs
+                  | otherwise = False
 
+isTerminator' (False:xs) = all (==True) xs
+isTerminator' _ = False
+
+takeWhileRest p xs@(x:xs') = if p xs then x : takeWhileRest p xs' else []
+takeWhileRest p [] = []
+
+listLengthIsSmallerThanOrEqualTo x xs = null $ drop x xs
+
+integersToBooleanListPadded = integersToBooleanListPadded' True
+integersToBooleanListTerminated = integersToBooleanListPaddedTerminated' True
+integersToBooleanListsPadded = integersToBooleanListsPadded' True
 integersToBigEndianBooleanListPadded = integersToBooleanListPadded' True
 integersToLittleEndianBooleanListPadded = integersToBooleanListPadded' False
+integersToBooleanListPadded' = integersToBooleanListPadded'' False
+integersToBooleanListPaddedTerminated' = integersToBooleanListPadded'' True
+integersToBooleanListPadded'' t e p xs = (if t then takeWhileRest (not . isTerminator p) else id) (concat (integersToBooleanListsPadded' e p xs))
+integersToBooleanListsPadded' e p xs = map (integerToBooleanListPadded'' e p) xs
 
 listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ booleanListToIntegers pSize xs
 
 toBoolean8s xs = integersToBooleanListPadded 8 xs
 
-precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded ( ceiling  . logBase 2 $ (fromIntegral x)) y )  (scanl1 max xs) xs
+precedentalEncoding xs = concat $ zipWith (\ x y -> integerToBooleanListPadded (ceiling . logBase 2 $ (fromIntegral x)) y)  (scanl1 max xs) xs
 
 int8Chunks xs = booleanListToIntegers 8 xs
 word8Chunks xs =  map (fromIntegral :: Integral a => a -> Word8) . int8Chunks $ xs

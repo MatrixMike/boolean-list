@@ -72,4 +72,10 @@ Prelude Data.BooleanList> integersToBigEndianBooleanListPadded 8 [0,128]
 
 Prelude Data.BooleanList> integersToLittleEndianBooleanListPadded 8 [256]
 [False,False,False,False,False,False,False,False,True]
+
+Prelude Data.BooleanList> booleanListToIntegersTerminated 8 [True,True,True,True,True,True,True,True,True]
+[255,191,255]
+
+Prelude Data.BooleanList> integersToBooleanListTerminated 8 [255,191,255]
+[True,True,True,True,True,True,True,True,True]
 ```

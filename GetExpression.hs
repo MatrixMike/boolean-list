@@ -33,4 +33,6 @@ expressions = [
   ,"bigEndianBooleanListToIntegers 8 [False,False,False,False,False,False,False,False,True]"
   ,"integersToBigEndianBooleanListPadded 8 [0,128]"
   ,"integersToLittleEndianBooleanListPadded 8 [256]"
+  ,"booleanListToIntegersTerminated 8 [True,True,True,True,True,True,True,True,True]"
+  ,"integersToBooleanListTerminated 8 [255,191,255]"
  ]
