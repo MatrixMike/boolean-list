@@ -1,8 +1,4 @@
-module GetExpression
-{-
-(getExpression)
--}
-where
+module GetExpression where
 
 import Language.Haskell.TH
 import Language.Haskell.Meta.Parse.Careful
@@ -18,23 +14,17 @@ expressions = [
   ,"booleanListToInteger [True,True,False,False]"
   ,"integerToBooleanListLittleEndian 12"
   ,"littleEndianBooleanListToInteger [False,False,True,True]"
-  ,"padBooleanListLeft 5 [False,True,True]"
-  ,"padBooleanListRight 5 [False,True,True]"
+  ,"padBooleanList 5 [False,True,True]"
+--  ,"padBooleanListRight 5 [False,True,True]"
   ,"integerToBooleanListPadded 4 2"
-  ,"integerToLittleEndianBooleanListPadded 4 2"
+ -- ,"integerToLittleEndianBooleanListPadded 4 2"
   ,"takeIntegerFromBooleanList 2 [False,True,False,True,True]"
-  ,"takeIntegerFromBooleanListLittleEndian 2 [False,True,False,True,True]"
+ -- ,"takeIntegerFromBooleanListLittleEndian 2 [False,True,False,True,True]"
   ,"booleanListToIntegers 2 [True,False,False,True,True]"
-  ,"littleEndianBooleanListToIntegers 2 [True,False,False,True,True]"
+ -- ,"littleEndianBooleanListToIntegers 2 [True,False,False,True,True]"
   ,"integersToBooleanListPadded 2 [2,1,2]"
-  ,"integersToLittleEndianBooleanListPadded 2 [2,1,2]"
-  ,"integersToLittleEndianBooleanListPadded 2 [2,1,5]"
-  ,"integerToBooleanListLittleEndian 256"
-  ,"bigEndianBooleanListToIntegers 8 [False,False,False,False,False,False,False,False,True]"
-  ,"integersToBigEndianBooleanListPadded 8 [0,128]"
-  ,"integersToLittleEndianBooleanListPadded 8 [256]"
-  ,"booleanListToIntegersTerminated 8 [True,True,True,True,True,True,True,True,True]"
-  ,"integersToBooleanListTerminated 8 [255,191,255]"
+ -- ,"integersToLittleEndianBooleanListPadded 2 [2,1,2]"
+ -- ,"integersToLittleEndianBooleanListPadded 2 [2,1,5]"
   ,"booleanListToByteString [True,True,True,True,True,True,True,True,True]"
   ,"byteStringToBooleanList (Data.ByteString.Char8.pack \"\\255\\191\\255\")"
  ]
