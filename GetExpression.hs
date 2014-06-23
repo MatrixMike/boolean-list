@@ -35,4 +35,6 @@ expressions = [
   ,"integersToLittleEndianBooleanListPadded 8 [256]"
   ,"booleanListToIntegersTerminated 8 [True,True,True,True,True,True,True,True,True]"
   ,"integersToBooleanListTerminated 8 [255,191,255]"
+  ,"booleanListToByteString [True,True,True,True,True,True,True,True,True]"
+  ,"byteStringToBooleanList (Data.ByteString.Char8.pack \"\\255\\191\\255\")"
  ]

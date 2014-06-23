@@ -76,14 +76,17 @@ booleanListToIntegers' = booleanListToIntegers'' False
 booleanListLittleEndianToIntegersTerminated = booleanListToIntegers'' True False
 booleanListToIntegersTerminated = booleanListToIntegers'' True True
 
-booleanListToIntegers'' t e p [] = []  
-booleanListToIntegers'' t e p xs | bitsLeftOver && t = booleanListToIntegers'' False e p (xs ++ terminator) 
-                                 | bitsLeftOver && (not t) = (op(2^bitsToGo) int) : []
+booleanListToByteString = Data.ByteString.pack  . map fromIntegral . booleanListToIntegersTerminated 8
+
+booleanListToIntegers'' t e p xs | null xs = []
+                                 | lastChunk && t = booleanListToIntegers'' False e p (xs ++ (take (bitsToGo + p) terminator)) 
+                                 | bitsLeftOver = (op(2^bitsToGo) int) : []
                                  | otherwise = int : booleanListToIntegers'' t e p rest  
  where (int,rest) = takeIntegerFromBooleanList' e p xs
        bitsLeftOver = listLengthIsSmallerThanOrEqualTo (p-1) xs
-       bitsToGo = p - (length xs `rem` p)
-       terminator = ((take (bitsToGo + p) (False:repeat True)))
+       lastChunk = listLengthIsSmallerThanOrEqualTo p xs
+       bitsToGo = (p - length xs) `rem` p
+       terminator = (False:repeat True)
        op = if e then (*) else flip const
 
 isTerminator p xs | listLengthIsSmallerThanOrEqualTo (2*p) xs = isTerminator' xs
@@ -106,6 +109,9 @@ integersToBooleanListPadded' = integersToBooleanListPadded'' False
 integersToBooleanListPaddedTerminated' = integersToBooleanListPadded'' True
 integersToBooleanListPadded'' t e p xs = (if t then takeWhileRest (not . isTerminator p) else id) (concat (integersToBooleanListsPadded' e p xs))
 integersToBooleanListsPadded' e p xs = map (integerToBooleanListPadded'' e p) xs
+
+byteStringToBooleanList = integersToBooleanListTerminated 8  . map fromIntegral . Data.ByteString.unpack 
+
 
 listOfPaddedIntegersToBooleanList pSize xs = concatMap integerToBooleanList $ booleanListToIntegers pSize xs
 

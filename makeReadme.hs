@@ -6,6 +6,7 @@ import Data.Either
 import GetExpression
 import Data.List
 import Data.BooleanList
+import Data.ByteString.Char8 (pack)
   
 insertAt = (\n x xs -> case splitAt n xs of { (a, b) -> a ++ [x] ++ b })
   
@@ -33,5 +34,7 @@ main = do file <- readFile "README.md.template"
 								++ "\n\n" ++ (makeGhciLine (expressions!!18)) ++ "\n" ++ (show $(return (getExpression (expressions!!18))))
 								++ "\n\n" ++ (makeGhciLine (expressions!!19)) ++ "\n" ++ (show $(return (getExpression (expressions!!19))))
 								++ "\n\n" ++ (makeGhciLine (expressions!!20)) ++ "\n" ++ (show $(return (getExpression (expressions!!20))))
+								++ "\n\n" ++ (makeGhciLine (expressions!!21)) ++ "\n" ++ (show $(return (getExpression (expressions!!21))))
+								++ "\n\n" ++ (makeGhciLine (expressions!!22)) ++ "\n" ++ (show $(return (getExpression (expressions!!22))))
 							 ) fileLines
           writeFile "README.md" modifiedFile

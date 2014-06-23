@@ -78,4 +78,10 @@ Prelude Data.BooleanList> booleanListToIntegersTerminated 8 [True,True,True,True
 
 Prelude Data.BooleanList> integersToBooleanListTerminated 8 [255,191,255]
 [True,True,True,True,True,True,True,True,True]
+
+Prelude Data.BooleanList> booleanListToByteString [True,True,True,True,True,True,True,True,True]
+"\255\191\255"
+
+Prelude Data.BooleanList> byteStringToBooleanList (Data.ByteString.Char8.pack "\255\191\255")
+[True,True,True,True,True,True,True,True,True]
 ```
