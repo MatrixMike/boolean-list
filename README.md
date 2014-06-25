@@ -48,4 +48,10 @@ Prelude Data.BooleanList> booleanListToByteString [True,True,True,True,True,True
 
 Prelude Data.BooleanList> byteStringToBooleanList (Data.ByteString.Char8.pack "\255\191\255")
 [True,True,True,True,True,True,True,True,True]
+
+Prelude Data.BooleanList> maximumIntegerForBools 7
+127
+
+Prelude Data.BooleanList> boolsRequiredForInteger 255
+8
 ```

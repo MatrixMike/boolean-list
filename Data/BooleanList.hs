@@ -7,6 +7,9 @@ import Control.Arrow
 import Control.Monad
 import Data.Maybe
 
+boolsRequiredForInteger n = length $ integerToBooleanList n
+maximumIntegerForBools n = booleanListToInteger $ replicate n True 
+
 integerToBooleanList :: Integral a => a -> [Bool]
 integerToBooleanList 0 = []
 integerToBooleanList n = integerToBooleanList div ++ [toEnum (fromIntegral rem)]
