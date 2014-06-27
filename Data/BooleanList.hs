@@ -105,6 +105,7 @@ listLengthIsSmallerThanOrEqualTo x xs = null $ drop x xs
 
 integersToBooleanListPadded = integersToBooleanListPadded' True
 integersToBooleanListTerminated = integersToBooleanListPaddedTerminated' True
+integersToBooleanLists = map integerToBooleanList
 integersToBooleanListsPadded = integersToBooleanListsPadded' True
 integersToBigEndianBooleanListPadded = integersToBooleanListPadded' True
 integersToLittleEndianBooleanListPadded = integersToBooleanListPadded' False
