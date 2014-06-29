@@ -130,6 +130,8 @@ toByteString xs = Data.ByteString.pack (word8Chunks xs)
 
 allBooleanLists = concat $ map (\x -> replicateM x [False,True] ) [1..]
 
+pruneBooleanList = dropWhile (==False)
+
 {- slow versions for testing -}
 encodeBooleanListInInteger' x = allBooleanLists !! x
 encodeIntegerInBooleanList' xs = fromJust (elemIndex xs allBooleanLists)
