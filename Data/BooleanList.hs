@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fwarn-missing-signatures #-}
 module Data.BooleanList where
 
 import Data.List
@@ -7,6 +8,7 @@ import Control.Arrow
 import Control.Monad
 import Data.Maybe
 
+boolsRequiredForInteger :: Integral a => a -> Int
 boolsRequiredForInteger n = length $ integerToBooleanList n
 maximumIntegerForBools n = booleanListToInteger $ replicate n True 
 
