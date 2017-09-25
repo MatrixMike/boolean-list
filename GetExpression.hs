@@ -3,7 +3,7 @@
 module GetExpression where
 
 import Data.Either
---import Language.Haskell.Meta.Parse.Careful
+import Language.Haskell.Meta.Parse.Careful
 import Language.Haskell.TH
 
 getExpression string = head $ rights [parseExp string]

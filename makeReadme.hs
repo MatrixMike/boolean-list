@@ -6,7 +6,7 @@ import Data.ByteString.Char8 (pack)
 import Data.Either
 import Data.List
 import GetExpression
---import Language.Haskell.Meta.Parse.Careful
+import Language.Haskell.Meta.Parse.Careful
 import Language.Haskell.TH
 import System.IO
 
@@ -71,8 +71,8 @@ main = do
            "\n" ++
            (show $(return (getExpression (expressions !! 11)))) ++
            "\n\n" ++
-           (makeGhciLine (expressions !! 12)) ++
-           "\n" ++ (show $(return (getExpression (expressions !! 12))))
+           makeGhciLine (expressions !! 12) ++
+           "\n" ++ show $(return (getExpression (expressions !! 12)))
                                                 --		++ "\n\n" ++ (makeGhciLine (expressions!!13)) ++ "\n" ++ (show $(return (getExpression (expressions!!13))))
                                                 --		++ "\n\n" ++ (makeGhciLine (expressions!!14)) ++ "\n" ++ (show $(return (getExpression (expressions!!14))))
                                         --			++ "\n\n" ++ (makeGhciLine (expressions!!15)) ++ "\n" ++ (show $(return (getExpression (expressions!!15))))

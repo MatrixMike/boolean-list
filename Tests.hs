@@ -22,4 +22,4 @@ main =
 -- f :: BS.ByteString
 f =
   BS.pack $
-  map (fromIntegral . ord) $ "The rain in spain falls mainly on the plane"
+  map (fromIntegral . ord)  "The rain in spain falls mainly on the plane"
