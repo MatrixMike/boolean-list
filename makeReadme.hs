@@ -6,7 +6,7 @@ import Data.ByteString.Char8 (pack)
 import Data.Either
 import Data.List
 import GetExpression
-import Language.Haskell.Meta.Parse.Careful
+--import Language.Haskell.Meta.Parse.Careful
 import Language.Haskell.TH
 import System.IO
 
