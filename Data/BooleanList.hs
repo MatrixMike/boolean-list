@@ -19,7 +19,7 @@ integerToBooleanList n = integerToBooleanList div ++ [toEnum (fromIntegral rem)]
 
 booleanListToInteger :: Integral a => [Bool] -> a
 booleanListToInteger (x:[]) = fromIntegral (fromEnum x)
-booleanListToInteger (x:xs) = ((2 * fromIntegral (fromEnum x)) ^ (length xs)) + rest
+booleanListToInteger (x:xs) = ((2 * fromIntegral (fromEnum x)) ^ length xs) + rest
   where rest = booleanListToInteger xs
 booleanListToInteger [] = 0
 
